@@ -1,9 +1,5 @@
 /*
 Tiny 'send email with feedback/bugreport' - v1.1 - MIT License (i.e. can use it for whatever purpose)
-
-Original author:
-Mihai Gosa, email:pintea@inthekillhouse.com  twitter: @gosamihai
-
 */
 
 #include <curl/curl.h>
