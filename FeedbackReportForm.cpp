@@ -1,5 +1,6 @@
 /*
 Tiny 'send email with feedback/bugreport' - v1.1 - MIT License (i.e. can use it for whatever purpose)
+Author: Mihai Gosa pintea@inthekillhouse.com
 */
 
 #include <curl/curl.h>
@@ -18,14 +19,14 @@ static int strappend(char* dest, int destCurrLen, const int destMaxLen, const ch
 	return destCurrLen;
 }
 
-int Base64Encode_Len(int inputLen)
+static int Base64Encode_Len(int inputLen)
 {
 	return ((inputLen+2) / 3) * 4; /* 3-byte blocks to 4-byte */
 }
 
 static const char c_base64To[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-int Base64Encode(const unsigned char * data, int len, char* output, int outLen)
+static int Base64Encode(const unsigned char * data, int len, char* output, int outLen)
 {
 	if (Base64Encode_Len(len) > outLen)
 		return 0;
