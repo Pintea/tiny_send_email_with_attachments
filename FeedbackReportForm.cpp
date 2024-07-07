@@ -155,7 +155,7 @@ bool SendFeedbackReportForm(const char* mail_from_name, const char* mail_from_ad
 		{
 			payload_len = strappend(payload, payload_len, maxlen, "--xxxxboundaryxxxx" NEW_LINE);
 			
-			if (strstr(mail_bin_attachment_filename, ".jpg") || strstr(attach.fileName, ".jpeg"))
+			if (strstr(mail_bin_attachment_filename, ".jpg") || strstr(mail_bin_attachment_filename, ".jpeg"))
 				payload_len = strappend(payload, payload_len, maxlen, "Content-Type: image/jpeg;" NEW_LINE);
 			else
 			if (strstr(mail_bin_attachment_filename, ".png"))
