@@ -133,7 +133,7 @@ bool SendFeedbackReportForm(const char* mail_from_name, const char* mail_from_ad
 		payload_len = strappend(payload, payload_len, maxlen, NEW_LINE "This is a multi-part message in MIME format." NEW_LINE);
 
 		payload_len = strappend(payload, payload_len, maxlen, "--xxxxboundaryxxxx" NEW_LINE);
-		payload_len = strappend(payload, payload_len, maxlen, "Content-Type: text/plain; charset=utf-8;" NEW_LINE);
+		payload_len = strappend(payload, payload_len, maxlen, "Content-Type: text/plain; charset=UTF-8;" NEW_LINE);
 		payload_len = strappend(payload, payload_len, maxlen, "Content-Transfer-Encoding: 8bit" NEW_LINE);
 		payload_len = strappend(payload, payload_len, maxlen, NEW_LINE);
 		payload_len = strappend(payload, payload_len, maxlen, mail_body);
@@ -142,10 +142,11 @@ bool SendFeedbackReportForm(const char* mail_from_name, const char* mail_from_ad
 		if (mail_txt_attachment)
 		{
 			payload_len = strappend(payload, payload_len, maxlen, "--xxxxboundaryxxxx" NEW_LINE);
-			payload_len = strappend(payload, payload_len, maxlen, "Content-Type: text/plain; charset=utf-8;" NEW_LINE);
+			payload_len = strappend(payload, payload_len, maxlen, "Content-Type: text/plain; charset=UTF-8;" NEW_LINE);
 			payload_len = strappend(payload, payload_len, maxlen, "Content-Disposition: attachment; filename=\"");
 			payload_len = strappend(payload, payload_len, maxlen, mail_txt_attachment_filename);
 			payload_len = strappend(payload, payload_len, maxlen, "\"" NEW_LINE);
+			payload_len = strappend(payload, payload_len, maxlen, "Content-Transfer-Encoding: 8bit" NEW_LINE);
 			payload_len = strappend(payload, payload_len, maxlen, NEW_LINE);
 			payload_len = strappend(payload, payload_len, maxlen, mail_txt_attachment);
 		}
@@ -153,11 +154,19 @@ bool SendFeedbackReportForm(const char* mail_from_name, const char* mail_from_ad
 		if (mail_bin_attachment)
 		{
 			payload_len = strappend(payload, payload_len, maxlen, "--xxxxboundaryxxxx" NEW_LINE);
-			payload_len = strappend(payload, payload_len, maxlen, "Content-Type: application/octet-stream;" NEW_LINE);
-			payload_len = strappend(payload, payload_len, maxlen, "Content-Transfer-Encoding: base64" NEW_LINE);
+			
+			if (strstr(mail_bin_attachment_filename, ".jpg") || strstr(attach.fileName, ".jpeg"))
+				payload_len = strappend(payload, payload_len, maxlen, "Content-Type: image/jpeg;" NEW_LINE);
+			else
+			if (strstr(mail_bin_attachment_filename, ".png"))
+				payload_len = strappend(payload, payload_len, maxlen, "Content-Type: image/png;" NEW_LINE);
+			else
+				payload_len = strappend(payload, payload_len, maxlen, "Content-Type: application/octet-stream;" NEW_LINE);
+
 			payload_len = strappend(payload, payload_len, maxlen, "Content-Disposition: attachment; filename=\"");
 			payload_len = strappend(payload, payload_len, maxlen, mail_bin_attachment_filename);
 			payload_len = strappend(payload, payload_len, maxlen, "\"" NEW_LINE);
+			payload_len = strappend(payload, payload_len, maxlen, "Content-Transfer-Encoding: base64" NEW_LINE);
 			payload_len = strappend(payload, payload_len, maxlen, NEW_LINE);
 			payload_len += Base64Encode(mail_bin_attachment, mail_bin_attachment_len, payload + payload_len, (maxlen - payload_len));
 			payload[payload_len] = '\0';
@@ -167,6 +176,8 @@ bool SendFeedbackReportForm(const char* mail_from_name, const char* mail_from_ad
 	}
 	else
 	{
+		payload_len = strappend(payload, payload_len, maxlen, "Content-Type: text/plain; charset=UTF-8;" NEW_LINE);
+		payload_len = strappend(payload, payload_len, maxlen, "Content-Transfer-Encoding: 8bit" NEW_LINE);
 		payload_len = strappend(payload, payload_len, maxlen, NEW_LINE /* empty line to divide headers from body, see RFC5322 */);
 		payload_len = strappend(payload, payload_len, maxlen, mail_body);
 		payload_len = strappend(payload, payload_len, maxlen, NEW_LINE);
