@@ -169,7 +169,6 @@ bool SendFeedbackReportForm(const char* mail_from_name, const char* mail_from_ad
 			payload_len = strappend(payload, payload_len, maxlen, "Content-Transfer-Encoding: base64" NEW_LINE);
 			payload_len = strappend(payload, payload_len, maxlen, NEW_LINE);
 			payload_len += Base64Encode(mail_bin_attachment, mail_bin_attachment_len, payload + payload_len, (maxlen - payload_len));
-			payload[payload_len] = '\0';
 		}
 
 		payload_len = strappend(payload, payload_len, maxlen, NEW_LINE "--xxxxboundaryxxxx--" NEW_LINE);
